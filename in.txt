@@ -1,0 +1,10 @@
+- Restart
+- Restart x
+- Reboot
+- Listen
+- Current image
+- Last 10 images
+- Play sound
+- Record sound
+- Stop record sound
+- Status xxx
