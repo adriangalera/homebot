@@ -1,3 +1,7 @@
 - Bark
 - Door opened
 - Movement detected (w/ images)
+- Status message
+- Sound recorded
+- Current image
+- Last images
