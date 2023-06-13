@@ -1,0 +1,4 @@
+command: /test2
+path: /test2
+port: 1234
+description: "test2"
