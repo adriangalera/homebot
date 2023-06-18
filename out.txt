@@ -1,3 +1,0 @@
-- Bark
-- Door opened
-- Movement detected (w/ images)
