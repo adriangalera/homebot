@@ -44,6 +44,7 @@ jobs:
           DEFAULT_BUMP: none
 
   build-armv6l:
+    if: needs.autotag.outputs.increment != ""
     needs: [ "autotag" ]
     runs-on: ubuntu-latest
     steps:
@@ -52,19 +53,19 @@ jobs:
           fetch-depth: '0'
       - name: Read output
         run: echo "Next tag is ${{needs.autotag.outputs.next-tag}} and increment is ${{needs.autotag.outputs.increment}}"
-#      - uses: pguyot/arm-runner-action@v2
-#        id: build_image
-#        with:
-#          image_additional_mb: 2048
-#          base_image: raspios_lite:latest
-#          cpu: arm1176
-#          cpu_info: cpuinfo/raspberrypi_zero_w
-#          commands: |
-#            GO_URL=https://go.dev/dl/
-#            export GOLANG="$(curl $GO_URL |grep linux-armv6l |grep -v beta |head -1 |awk -F\> {'print $3'}|awk -F\< {'print $1'})"
-#            wget $GO_URL$GOLANG
-#            sudo tar -C /usr/local -xzf $GOLANG
-#            rm $GOLANG
-#            unset GOLANG
-#            export PATH=$PATH:/usr/local/go/bin
-#            make clean build
+      - uses: pguyot/arm-runner-action@v2
+        id: build_image
+        with:
+          image_additional_mb: 2048
+          base_image: raspios_lite:latest
+          cpu: arm1176
+          cpu_info: cpuinfo/raspberrypi_zero_w
+          commands: |
+            GO_URL=https://go.dev/dl/
+            export GOLANG="$(curl $GO_URL |grep linux-armv6l |grep -v beta |head -1 |awk -F\> {'print $3'}|awk -F\< {'print $1'})"
+            wget $GO_URL$GOLANG
+            sudo tar -C /usr/local -xzf $GOLANG
+            rm $GOLANG
+            unset GOLANG
+            export PATH=$PATH:/usr/local/go/bin
+            make clean build
