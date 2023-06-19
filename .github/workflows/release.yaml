@@ -5,8 +5,8 @@ on:
     branches:
       - 'main'
 jobs:
-  test-and-tag: #from https://medium.com/@AranT/auto-tagging-and-using-semantic-versioning-with-github-actions-e40188d12cf4
-    name: "tag"
+  autotag: #from https://medium.com/@AranT/auto-tagging-and-using-semantic-versioning-with-github-actions-e40188d12cf4
+    name: "autotag"
     permissions: write-all
     runs-on: ubuntu-latest
     outputs:
@@ -44,14 +44,14 @@ jobs:
           DEFAULT_BUMP: none
 
   build-armv6l:
-    needs: [ "tag" ]
+    needs: [ "autotag" ]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
         with:
           fetch-depth: '0'
       - name: Read output
-        run: echo ${{needs.tag.outputs.next-tag}} ${{needs.tag.outputs.increment}}
+        run: echo ${{needs.autotag.outputs.next-tag}} ${{needs.autotag.outputs.increment}}
 #      - uses: pguyot/arm-runner-action@v2
 #        id: build_image
 #        with:
