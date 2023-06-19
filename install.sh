@@ -50,9 +50,9 @@ ensure_folders_and_files() {
 }
 install() {
   check_requirements
-  ensure_folders_and_files
   echo "Downloading ..."
   download_homebot
+  ensure_folders_and_files
   cd $TMP_FOLDER || exit
   echo "Building ..."
   build
