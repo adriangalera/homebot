@@ -1,0 +1,7 @@
+bot:
+  name: ""
+telegram:
+  token: ""
+  group-id: ""
+api:
+  port: 0
