@@ -60,4 +60,5 @@ jobs:
             sudo tar -C /usr/local -xzf $GOLANG
             rm $GOLANG
             unset GOLANG
+            export PATH=$PATH:/usr/local/go/bin
             make clean build
