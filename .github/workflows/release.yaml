@@ -44,7 +44,7 @@ jobs:
           DEFAULT_BUMP: none
 
   build-armv6l:
-    if: needs.autotag.outputs.increment != ""
+    if: needs.autotag.outputs.increment != ''
     needs: [ "autotag" ]
     runs-on: ubuntu-latest
     steps:
