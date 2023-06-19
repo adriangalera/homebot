@@ -56,7 +56,7 @@ jobs:
       - uses: pguyot/arm-runner-action@v2
         id: build_image
         with:
-          image_additional_mb: 2048
+          image_additional_mb: 512
           base_image: raspios_lite:latest
           cpu: arm1176
           cpu_info: cpuinfo/raspberrypi_zero_w
