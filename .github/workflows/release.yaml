@@ -51,7 +51,7 @@ jobs:
         with:
           fetch-depth: '0'
       - name: Read output
-        run: echo ${{needs.autotag.outputs.next-tag}} ${{needs.autotag.outputs.increment}}
+        run: echo "Next tag is ${{needs.autotag.outputs.next-tag}} and increment is ${{needs.autotag.outputs.increment}}"
 #      - uses: pguyot/arm-runner-action@v2
 #        id: build_image
 #        with:
