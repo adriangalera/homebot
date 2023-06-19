@@ -21,7 +21,7 @@ check_requirements() {
 }
 download_homebot() {
   rm -rf $TMP_FOLDER || exit 0
-  if ! git clone --quiet https://github.com/adriangalera/homebot -b install-script $TMP_FOLDER; then
+  if ! git clone --quiet https://github.com/adriangalera/homebot $TMP_FOLDER; then
     echo "Can't clone repository"
     exit 1
   fi
