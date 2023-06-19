@@ -42,7 +42,6 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           WITH_V: true
           DEFAULT_BUMP: none
-
   build-armv6l:
     if: needs.autotag.outputs.increment != ''
     needs: [ "autotag" ]
@@ -68,4 +67,4 @@ jobs:
             rm $GOLANG
             unset GOLANG
             export PATH=$PATH:/usr/local/go/bin
-            make clean build
+            VERSION=${{needs.autotag.outputs.next-tag}} PLATFORM=armv6l make clean build
