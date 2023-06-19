@@ -9,6 +9,9 @@ jobs:
   release:
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: '0'
       - name: Auto-tag dry-run
         id: taggerDryRun
         uses: anothrNick/github-tag-action@1.36.0
