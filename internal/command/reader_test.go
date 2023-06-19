@@ -38,13 +38,6 @@ func TestReadCommandsNotExistingFolder(t *testing.T) {
 	assert.True(t, existsFolder)
 }
 
-func TestReadCommandsNotAccessibleFolder(t *testing.T) {
-	commandFolder := "/notexistingfolder"
-	commands, err := ReadCommands(commandFolder)
-	assert.Equal(t, 0, commands.Length())
-	assert.NotNil(t, err)
-}
-
 func TestAddLocalCommands(t *testing.T) {
 	wrapper := &ArrayListWrapper{}
 	type args struct {

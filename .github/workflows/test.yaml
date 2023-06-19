@@ -1,0 +1,12 @@
+name: homebot-test
+on: [ push ]
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    container:
+      image: golang:1.20.5-alpine
+      steps:
+        - name: Install base
+          run: apk add build-base
+        - name: Clean and test
+          run: make clean test
