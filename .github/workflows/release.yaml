@@ -1,20 +1,59 @@
-name: homebot-release
-concurrency: release
+name: homebot-auto-tag
+concurrency: autotag
 on:
   push:
-    tags:
-      - '**'
+    branches:
+      - 'main'
 jobs:
-    build-and-release:
-      runs-on: ubuntu-latest
-      container:
-        image: golang:1.20.5-alpine
-      steps:
-        - uses: actions/checkout@v3
-          with:
-            fetch-depth: '0'
-        - name: Install base
-          run: apk add build-base
-        - name: Build binary
-          run: make clean build
+  test-and-tag: #from https://medium.com/@AranT/auto-tagging-and-using-semantic-versioning-with-github-actions-e40188d12cf4
+    permissions: write-all
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: '0'
+      - name: Auto-tag dry-run
+        id: taggerDryRun
+        uses: anothrNick/github-tag-action@1.36.0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          WITH_V: true
+          DRY_RUN: true
+          DEFAULT_BUMP: none
+      - name: echo tag information
+        run: |
+          echo "The next tag version will be: ${{ steps.taggerDryRun.outputs.new_tag }}"
+          echo "The current tag is: ${{ steps.taggerDryRun.outputs.tag }}"
+          echo "The version increment was: ${{ steps.taggerDryRun.outputs.part }}"
+      - name: Set up Go
+        uses: actions/setup-go@v4
+        with:
+          go-version: '1.20.5'
+      - name: Test
+        run: go test -v ./...
+      - name: Auto-tag
+        id: taggerFinal
+        uses: anothrNick/github-tag-action@1.36.0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          WITH_V: true
+          DEFAULT_BUMP: none
+  build-armv6l:
+    runs-on: ubuntu-latest
+    container:
+      image: balenalib/raspberry-pi-debian:buster
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: '0'
+      - name: Install base and golang
+        run: |
+          apk add build-base
+          export GOLANG="$(curl https://golang.org/dl/|grep linux-armv6l|grep -v beta|head -1|awk -F\> {'print $3'}|awk -F\< {'print $1'})"
+          wget https://golang.org/dl/$GOLANG
+          sudo tar -C /usr/local -xzf $GOLANG
+          rm $GOLANG
+          unset GOLANG
+      - name: Build binary
+        run: VERSION=${{ steps.taggerDryRun.outputs.new_tag }}  PLATFORM=armv6l make clean build
 
