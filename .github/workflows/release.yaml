@@ -1,0 +1,23 @@
+name: homebot-release
+concurrency: release
+on:
+  push:
+    tags:
+      - "*"
+jobs:
+  build-and-release:
+    permissions: write-all
+    runs-on: ubuntu-latest
+    container-test-job:
+      runs-on: ubuntu-latest
+      container:
+        image: golang:1.20.5-alpine
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: '0'
+      - name: Install base
+        run: apk add build-base
+      - name: Build binary
+        run: make clean build
+

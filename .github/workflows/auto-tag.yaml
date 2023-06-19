@@ -1,5 +1,5 @@
 #from https://medium.com/@AranT/auto-tagging-and-using-semantic-versioning-with-github-actions-e40188d12cf4
-name: homebot-release
+name: homebot-auto-tag
 concurrency: release
 on:
   push:
