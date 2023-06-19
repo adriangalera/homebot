@@ -40,20 +40,36 @@ jobs:
           DEFAULT_BUMP: none
   build-armv6l:
     runs-on: ubuntu-latest
-    container:
-      image: balenalib/raspberry-pi-debian:buster
     steps:
       - uses: actions/checkout@v3
         with:
           fetch-depth: '0'
-      - name: Install base and golang
-        run: |
-          apk add build-base
-          export GOLANG="$(curl https://golang.org/dl/|grep linux-armv6l|grep -v beta|head -1|awk -F\> {'print $3'}|awk -F\< {'print $1'})"
-          wget https://golang.org/dl/$GOLANG
-          sudo tar -C /usr/local -xzf $GOLANG
-          rm $GOLANG
-          unset GOLANG
-      - name: Build binary
-        run: VERSION=${{ steps.taggerDryRun.outputs.new_tag }}  PLATFORM=armv6l make clean build
+      - uses: pguyot/arm-runner-action@v2
+        id: build_image
+        with:
+          base_image: balenalib/raspberry-pi-debian:buster
+          commands: |
+            apk add build-base
+            export GOLANG="$(curl https://golang.org/dl/|grep linux-armv6l|grep -v beta|head -1|awk -F\> {'print $3'}|awk -F\< {'print $1'})"
+            wget https://golang.org/dl/$GOLANG
+            sudo tar -C /usr/local -xzf $GOLANG
+            rm $GOLANG
+            unset GOLANG
+            make clean build
+
+          
+          
+          
+          
+
+#      - name: Install base and golang
+#        run: |
+#          apk add build-base
+#          export GOLANG="$(curl https://golang.org/dl/|grep linux-armv6l|grep -v beta|head -1|awk -F\> {'print $3'}|awk -F\< {'print $1'})"
+#          wget https://golang.org/dl/$GOLANG
+#          sudo tar -C /usr/local -xzf $GOLANG
+#          rm $GOLANG
+#          unset GOLANG
+#      - name: Build binary
+#        run: VERSION=${{ steps.taggerDryRun.outputs.new_tag }}  PLATFORM=armv6l make clean build
 
