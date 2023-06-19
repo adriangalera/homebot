@@ -78,3 +78,9 @@ jobs:
             unset GOLANG
             export PATH=$PATH:/usr/local/go/bin
             VERSION=${{needs.autotag.outputs.next-tag}} PLATFORM=armv6l make clean build
+      - uses: "marvinpinto/action-automatic-releases@latest"
+        with:
+          repo_token: "${{ secrets.GITHUB_TOKEN }}"
+          prerelease: false
+          files: |
+            build/*
