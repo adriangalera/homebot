@@ -1,0 +1,15 @@
+# --------------------------------------------------------------------------
+# Systemd service definition for homebot.service.
+#
+# --------------------------------------------------------------------------
+[Unit]
+Description=Homebot
+Requires=network-online.target
+After=network-online.target
+
+[Service]
+User=pi
+ExecStart=/home/pi/.local/bin/homebot
+
+[Install]
+WantedBy=multi-user.target
