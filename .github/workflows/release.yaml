@@ -46,13 +46,15 @@ jobs:
     if: needs.autotag.outputs.increment != ''
     needs: [ "autotag" ]
     runs-on: ubuntu-latest
-    matrix:
-      target: [ zero_raspios ]
-      include:
-        - target: zero_raspios
-          cpu: arm1176
-          cpu_info: cpuinfo/raspberrypi_zero_w
-          base_image: raspios_lite:latest
+    strategy:
+      fail-fast: true
+      matrix:
+        target: [ zero_raspios ]
+        include:
+          - target: zero_raspios
+            cpu: arm1176
+            cpu_info: cpuinfo/raspberrypi_zero_w
+            base_image: raspios_lite:latest
     steps:
       - uses: actions/checkout@v3
         with:
