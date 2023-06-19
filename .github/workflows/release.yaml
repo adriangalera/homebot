@@ -3,7 +3,7 @@ concurrency: release
 on:
   push:
     tags:
-      - '*'
+      - '**'
 jobs:
   build-and-release:
     permissions: write-all
