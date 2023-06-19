@@ -1,6 +1,8 @@
-name: homebot-test
+name: homebot-test-branch
 on:
   push:
+    branches-ignore:
+      - 'main'
 jobs:
   test:
     runs-on: ubuntu-latest
