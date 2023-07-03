@@ -21,7 +21,7 @@ type Bot struct {
 }
 
 func NewTelegramBot(config *config.Config, executor *command.Executor, wrapper command.Wrapper) (Bot, error) {
-	b, err := bot.New(config.Telegram.Token)
+	b, err := bot.New(config.Telegram.Token, bot.WithDefaultHandler(unknownHandler))
 	if err != nil {
 		return Bot{}, err
 	}
@@ -94,18 +94,30 @@ func (t *Bot) commandHandler(ctx context.Context, b *bot.Bot, update *models.Upd
 	log.Printf("Received %v command", commandText)
 	cmd := t.wrapper.FindByCommand(commandText)
 	if cmd == nil {
-		commandNotFoundText := fmt.Sprintf("remoteCommand not recognized %s", commandText)
+		commandNotFoundText := fmt.Sprintf("command not recognized: %s", commandText)
 		log.Printf(commandNotFoundText + "\n")
 		messageError = t.SendText(commandNotFoundText)
 	} else {
 		errorExecutingCommand := t.HandleCommand(cmd)
 		if errorExecutingCommand != nil {
-			errorMessage := fmt.Sprintf("Cannot execute command %s", commandText)
+			errorMessage := fmt.Sprintf("Cannot execute command: %s", commandText)
 			log.Printf("%s", errorMessage)
 			messageError = t.SendText(errorMessage)
 		}
 	}
 	if messageError != nil {
 		log.Printf("couldn't send telegarm message. error: %s", messageError)
+	}
+}
+
+func unknownHandler(ctx context.Context, b *bot.Bot, update *models.Update) {
+	commandNotFoundText := fmt.Sprintf("command not recognized: %s", update.Message.Text)
+	log.Printf(commandNotFoundText + "\n")
+	_, err := b.SendMessage(ctx, &bot.SendMessageParams{
+		ChatID: update.Message.Chat.ID,
+		Text:   commandNotFoundText,
+	})
+	if err != nil {
+		log.Printf("couldn't send telegarm message. error: %s", err)
 	}
 }
